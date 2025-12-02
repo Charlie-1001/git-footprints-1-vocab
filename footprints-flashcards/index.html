@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flashcards</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      display: flex;
+      height: 50px;
+      width: 100%;
+      background-color: black;
+      color: white;
+      align-items: center;
+      padding: 0 1rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    header h1 {
+      flex: 1;
+    }
+
+    header select, header button {
+      height: 80%;
+      cursor: pointer;
+      padding: 0.5rem;
+      margin-left: 1rem;
+      border-radius: 0.5rem;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    header select {
+      width: 20%;
+    }
+
+    header button {
+      background-color: yellow;
+    }
+
+    #container {
+      height: calc(100vh - 50px);
+      width: 100%;
+      margin-top: 50px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      /* grid-template-rows: repeat(2, 1fr); */
+      gap: 5px;
+      border: 2px solid blue;
+      padding: 1rem;
+    }
+
+    .img-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border: 1px solid grey;
+      box-shadow: 3px 3px 5px rgb(123, 122, 122);
+      overflow: hidden;
+    }
+
+    .images {
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .meaning {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      color: yellow;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.664);
+      padding: 0.5rem;
+    }
+
+    .hide-items {
+      display: none;
+    }
+
+    .reading {
+      display: block;
+      background-color: #f0f0f0;
+      color: black;
+      font-size: 2.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      height: fit-content;
+    }
+
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Footprints 1</h1>
+    <select>
+      <option value="unit1">Unit 1</option>
+      <option value="unit2">Unit 2</option>
+      <option value="unit3">Unit 3</option>
+      <option value="unit4">Unit 4</option>
+      <option value="unit5">Unit 5</option>
+      <option value="unit6">Unit 6</option>
+    </select>
+    <button id="toggleText">Hide Text</button>
+    <button id="reading">Reading</button>
+  </header>
+
+  <main id="container"></main>
+
+  <!-- The script -->
+  <script>
+    const data = [
+      {unit: "unit1", flashcards: [
+        { name: "cake", image: "images/cake.png" },
+        { name: "candle", image: "images/candle.png" },
+        { name: "present", image: "images/present.png" },
+        { name: "balloon", image: "images/balloon.png" },
+        { name: "hat", image: "images/hat.png" },
+        { name: "card", image: "images/card.png" },
+        { name: "biscuit", image: "images/biscuit.png" },
+        { name: "sandwich", image: "images/sandwich.png" },
+        { name: "plate", image: "images/plate.png" },
+        { name: "cup", image: "images/cup.png" },
+      ]}, 
+      {unit: "unit2", flashcards: [
+        { name: "schoolbag", image: "images/schoolbag.png" },
+        { name: "file", image: "images/file.png" },
+        { name: "notebook", image: "images/notebook.png" },
+        { name: "pen", image: "images/pen.png" },
+        { name: "pencil", image: "images/pencil.png" },
+        { name: "crayon", image: "images/crayon.png" },
+        { name: "rubber", image: "images/rubber.png" },
+        { name: "sharpener", image: "images/sharpener.png" },
+        { name: "pencil case", image: "images/pencil case.png" },
+        { name: "ruler", image: "images/ruler.png" },
+      ]}, 
+      {unit: "unit3", flashcards: [
+        { name: "head", image: "images/head.png" },
+        { name: "ears", image: "images/ears.png" },
+        { name: "eyes", image: "images/eyes.png" },
+        { name: "nose", image: "images/nose.png" },
+        { name: "mouth", image: "images/mouth.png" },
+        { name: "chin", image: "images/chin.png" },
+        { name: "arms", image: "images/arms.png" },
+        { name: "legs", image: "images/legs.png" },
+        { name: "fingers", image: "images/fingers.png" },
+        { name: "toes", image: "images/toes.png" },
+      ]},
+      {unit: "unit4", flashcards: [
+        { name: "coat", image: "images/coat.png" },
+        { name: "gloves", image: "images/gloves.png" },
+        { name: "trousers", image: "images/trousers.png" },
+        { name: "shirt", image: "images/shirt.png" },
+        { name: "t-shirt", image: "images/t-shirt.png" },
+        { name: "dress", image: "images/dress.png" },
+        { name: "skirt", image: "images/skirt.png" },
+        { name: "shoes", image: "images/shoes.png" },
+        { name: "jumper", image: "images/jumper.png" },
+        { name: "socks", image: "images/socks.png" },
+      ]},
+      {unit: "unit5", flashcards: [
+        { name: "hamburger", image: "images/hamburger.png" },
+        { name: "chicken", image: "images/chicken.png" },
+        { name: "chips", image: "images/chips.png" },
+        { name: "salad", image: "images/salad.png" },
+        { name: "pizza", image: "images/pizza.png" },
+        { name: "ice cream", image: "images/ice cream.png" },
+        { name: "chocolate", image: "images/chocolate.png" },
+        { name: "yogurt", image: "images/yogurt.png" },
+        { name: "apple", image: "images/apple.png" },
+        { name: "banana", image: "images/banana.png" },
+      ]},
+      {unit: "unit6", flashcards: [
+        { name: "doll", image: "images/doll.png" },
+        { name: "bike", image: "images/bike.png" },
+        { name: "ball", image: "images/ball.png" },
+        { name: "car", image: "images/car.png" },
+        { name: "train", image: "images/train.png" },
+        { name: "marbles", image: "images/marbles.png" },
+        { name: "skates", image: "images/skates.png" },
+        { name: "plane", image: "images/plane.png" },
+        { name: "robot", image: "images/robot.png" },
+        { name: "computer game", image: "images/computer game.png" },
+      ]},
+    ];
+    
+    const container = document.getElementById("container");
+    const toggleTextBtn = document.getElementById("toggleText");
+    const readingBtn = document.getElementById("reading");
+    const unitSelect = document.querySelector("header select");
+
+    function loadImages(unit = "unit1") {
+      const selectedUnit = data.find(u => u.unit === unit);
+      selectedUnit.flashcards.forEach(item => {
+        const imgFrame = document.createElement("div");
+        const image = document.createElement("img");
+        const meaning = document.createElement("h1");
+
+        imgFrame.className = "img-frame";
+        image.src = item.image;
+        image.className = "images";
+        meaning.className = "meaning";
+        meaning.textContent = item.name;
+        imgFrame.appendChild(image);
+        imgFrame.appendChild(meaning);
+        container.appendChild(imgFrame);
+      });
+    }
+
+    loadImages();
+    
+    unitSelect.addEventListener("change", (e) => {
+      container.innerHTML = "";
+      loadImages(e.target.value);
+    })
+
+    toggleTextBtn.addEventListener("click", () => {
+        toggleTextBtn.textContent = toggleTextBtn.textContent === "Hide Text" ? "Show Text" : "Hide Text";
+        document.querySelectorAll(".meaning").forEach(meaning => {
+          meaning.classList.toggle("hide-items");
+        })
+    });
+
+    readingBtn.addEventListener("click", () => {
+      readingBtn.textContent = readingBtn.textContent === "Reading" ? "Studying" : "Reading";
+      document.querySelectorAll(".meaning").forEach(meaning => {
+        meaning.classList.toggle("reading");
+      })
+      document.querySelectorAll(".images").forEach(image => {
+        image.classList.toggle("hide-items");
+      })
+    });
+
+  </script>
+</body>
+</html>
