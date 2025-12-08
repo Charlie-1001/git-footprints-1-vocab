@@ -123,7 +123,7 @@
             let inserted = false;
             for (let b of all) {
               const rect = b.getBoundingClientRect();
-              if (clientX < rect.left + rect.width / 2) {
+              if (clientX < rect.left) {
                 dropzone.insertBefore(newBubble, b);
                 inserted = true;
                 break;
